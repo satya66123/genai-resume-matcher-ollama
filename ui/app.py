@@ -36,7 +36,7 @@ if st.button("🔍 Analyze Match"):
         st.metric(label="Similarity", value=f"{result['match_score']}%")
 
         # Show Feedback
-        st.subheader("🤖 AI Feedback")
+        st.subheader("Feedback")
         st.write(result["ai_feedback"])
 
     else:

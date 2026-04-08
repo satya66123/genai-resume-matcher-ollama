@@ -1,3 +1,5 @@
+fastapi
+pydantic
 requests
 scikit-learn
 streamlit
