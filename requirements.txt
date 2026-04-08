@@ -1,3 +1,4 @@
+plotly
 httpx
 pandas
 sentence-transformers

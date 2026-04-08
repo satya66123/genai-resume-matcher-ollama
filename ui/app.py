@@ -10,6 +10,46 @@ import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.file_parser import extract_text
+import json
+import os
+
+def select_best_model(results):
+    if not results:
+        return None
+
+    # Sort by: highest quality, then lowest time
+    best = sorted(
+        results,
+        key=lambda x: (x["quality"], -x["time"]),
+        reverse=True
+    )[0]
+
+    return best["model"]
+def save_result(data):
+    try:
+        # Ensure folder exists
+        os.makedirs("data", exist_ok=True)
+
+        file_path = "data/history.json"
+
+        # If file doesn't exist → create empty list
+        if not os.path.exists(file_path):
+            with open(file_path, "w") as f:
+                json.dump([], f)
+
+        # Read existing data
+        with open(file_path, "r") as f:
+            history = json.load(f)
+
+        # Append new result
+        history.append(data)
+
+        # Save back
+        with open(file_path, "w") as f:
+            json.dump(history, f, indent=2)
+
+    except Exception as e:
+        print("Error saving history:", e)
 
 API_URL = "http://127.0.0.1:8000/analyze"
 MODELS = ["llama3:instruct", "llama3", "mistral"]
