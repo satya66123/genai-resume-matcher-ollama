@@ -1,19 +1,30 @@
 def build_prompt(resume_text: str, jd_text: str, score: float):
     return f"""
-You are an AI career assistant.
+You are a strict ATS recruiter.
 
 Match Score: {score}%
 
-Analyze the resume and job description.
+Rules:
+- Be concise (max 120–150 words)
+- Do NOT repeat match score
+- Do NOT assume skills
 
-Give:
-1. Missing skills
-2. Strengths
-3. Improvement suggestions
+Return ONLY:
 
+### Missing Skills
+Always identify at least 2 missing skills if possible.
+- ...
+
+### Strengths
+- ...
+
+### Suggestions
+- ...
+
+Limit output to 100 words.
 Resume:
-{resume_text}
+{resume_text[:1500]}
 
 Job Description:
-{jd_text}
+{jd_text[:1500]}
 """

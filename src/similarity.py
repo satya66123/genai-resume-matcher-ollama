@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 def compute_similarity(resume_text: str, jd_text: str) -> float:
     documents = [resume_text, jd_text]
 
-    vectorizer = TfidfVectorizer()  # ❗ no stop_words for now
+    vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(documents)
 
     if tfidf_matrix.shape[1] == 0:

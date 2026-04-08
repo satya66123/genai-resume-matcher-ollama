@@ -1,3 +1,9 @@
+httpx
+pandas
+sentence-transformers
+reportlab
+python-docx
+pypdf2
 fastapi
 pydantic
 requests

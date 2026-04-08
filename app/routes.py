@@ -7,5 +7,9 @@ router = APIRouter()
 
 @router.post("/analyze", response_model=AnalyzeResponse)
 def analyze(data: AnalyzeRequest):
-    result = run_pipeline(data.resume_text, data.jd_text)
+    result = run_pipeline(
+        data.resume_text,
+        data.jd_text,
+        data.model
+    )
     return result

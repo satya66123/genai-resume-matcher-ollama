@@ -3,13 +3,18 @@ import requests
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 
-def generate_response(prompt: str, model: str = "llama3"):
+def generate_response(prompt: str, model: str = "llama3:instruct"):
     response = requests.post(
         OLLAMA_URL,
         json={
             "model": model,
             "prompt": prompt,
-            "stream": False
+            "stream": False,
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "num_predict": 120
+            }
         }
     )
 
