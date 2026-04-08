@@ -1,0 +1,6 @@
+FROM ollama/ollama
+
+# Pull models at build time
+RUN ollama pull llama3
+RUN ollama pull llama3:instruct
+RUN ollama pull mistral

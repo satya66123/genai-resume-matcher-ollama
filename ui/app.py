@@ -5,12 +5,23 @@ import os
 import time
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
+import plotly.express as px
+import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.file_parser import extract_text
 
 API_URL = "http://127.0.0.1:8000/analyze"
 MODELS = ["llama3:instruct", "llama3", "mistral"]
+USERNAME = "admin"
+PASSWORD = "1234"
+
+user = st.sidebar.text_input("Username")
+pwd = st.sidebar.text_input("Password", type="password")
+
+if user != USERNAME or pwd != PASSWORD:
+    st.warning("Login required")
+    st.stop()
 
 st.set_page_config(page_title="GenAI Resume Matcher", layout="wide")
 
@@ -142,6 +153,13 @@ if st.button("🔍 Analyze"):
 
     result = call_model(selected_model, resume_text, jd_text)
 
+    # ✅ SAVE RESULT HERE
+    save_result({
+        "model": selected_model,
+        "score": result["score"],
+        "time": result["time"]
+    })
+
     progress.progress(40)
 
     st.subheader(f"🎯 Selected Model: {selected_model}")
@@ -233,7 +251,37 @@ Quality: {r['quality']}
             st.download_button("PDF", generate_pdf(report), "comparison.pdf")
 
     status.text("✅ Analysis Completed")
+    df = pd.DataFrame(results)
 
+    fig = px.bar(
+        df,
+        x="model",
+        y="time",
+        title="Response Time Comparison"
+    )
+
+    st.plotly_chart(fig)
+    fig2 = px.bar(
+        df,
+        x="model",
+        y="quality",
+        title="Quality Score Comparison"
+    )
+
+    st.plotly_chart(fig2)
+    best_model = select_best_model(results)
+
+    st.success(f"🧠 Recommended Model: {best_model}")
+    import json
+
+    st.subheader("📜 Previous Runs")
+
+    try:
+        with open("data/history.json", "r") as f:
+            history = json.load(f)
+            st.write(history[-5:])  # last 5 results
+    except:
+        st.info("No history yet")
 # -------------------------------
 # Footer
 # -------------------------------
